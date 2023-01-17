@@ -17,7 +17,7 @@ import Favorites from "./Favorites";
 import { LinearProgress } from "@mui/material";
 
 function Calendar() {
-  const tileSize = "50px";
+  const tileSize = "45px";
 
   const CustomPicker = styled(CalendarPicker)(({ theme }) => ({
     "&.MuiCalendarPicker-root": {
