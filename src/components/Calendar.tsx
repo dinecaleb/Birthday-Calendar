@@ -16,22 +16,21 @@ import TabPanel from "@mui/lab/TabPanel";
 import Favorites from "./Favorites";
 
 function Calendar() {
-  const tileSize = "65px";
+  const tileSize = "50px";
 
   const CustomPicker = styled(CalendarPicker)(({ theme }) => ({
     "&.MuiCalendarPicker-root": {
-      width: "100%",
-      maxHeight: "600px",
-      height: "600px",
+      width: 'auto',
+      maxHeight: "400px",
+      height: "400px",
     },
     "& .MuiCalendarPicker-viewTransitionContainer": {
       "& .css-sf5t6v-PrivatePickersSlideTransition-root-MuiDayPicker-slideTransition":
         {
-          minHeight: "350px",
           height: "auto",
         },
-      "& .css-qklzlb-MuiDayPicker-header": {
-        "& .css-raiqh1-MuiTypography-root-MuiDayPicker-weekDayLabel": {
+      "& .MuiDayPicker-header": {
+        "& .MuiDayPicker-weekDayLabel": {
           height: tileSize,
           width: tileSize,
           color: "#000",

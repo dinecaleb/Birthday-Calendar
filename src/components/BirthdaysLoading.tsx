@@ -5,7 +5,7 @@ import React from "react";
 export default function BirthdaysLoading() {
   return (
     <div className="w-full">
-      {[...Array(10)].map((elementInArray, index) => (
+      {[...Array(7)].map((elementInArray, index) => (
         <div key={index + "loading"} className="mb-4">
           <Skeleton variant="rectangular" height={60} />
         </div>

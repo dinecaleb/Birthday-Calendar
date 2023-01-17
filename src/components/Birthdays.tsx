@@ -115,7 +115,7 @@ export default function Birthdays({
       </div>
 
       <FixedSizeList
-        height={600}
+        height={400}
         width="100%"
         itemSize={50}
         itemCount={data ? data.length : 0}

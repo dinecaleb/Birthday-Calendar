@@ -44,7 +44,7 @@ export default function Favorites({
   };
 
   return (
-    <div className="w-full overflow-auto max-h-[600px]">
+    <div className="w-full overflow-auto max-h-[400px]">
       {favs && Object.keys(favs).length > 0 ? (
         <List>
           {Object.keys(favs).map((key, index) => {
