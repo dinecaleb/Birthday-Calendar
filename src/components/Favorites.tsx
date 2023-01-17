@@ -11,24 +11,31 @@ import { List, ListSubheader } from "@mui/material";
 interface FavoritesProps {
   birthdays?: Array<any>;
   addFavorite?: Function | any;
+  updateBirthdays?: Function | any;
   removeFavorite?: Function | any;
-  isFavorite?: boolean;
+  favorites?: Array<any>;
+
 }
 
 export default function Favorites({
   birthdays,
   addFavorite,
   removeFavorite,
+  favorites
 }: FavoritesProps) {
-  const favs = _.groupBy(birthdays, (birthday) => birthday.date); ///group by birthday
+  const favs = _.groupBy(favorites, (birthday) => birthday.date); ///group by birthday
 
 
   const favourite = (value: any, index: number) => {
-    if (birthdays) {
-      const birthdayList = [...birthdays];
-      const selected = birthdayList[index];
-      selected["favorite"] = selected.favorite ? false : true;
+    if (favorites) {
+      const birthdayList = [...favorites];
+      const selected = birthdayList.find((fav)=> fav?.text === value?.text);
 
+      if(selected){
+        selected["favorite"] = selected.favorite ? false : true;
+
+      }
+      
       if (selected.favorite) {
         ///add to favorites list as selection changes per day
         addFavorite(selected);

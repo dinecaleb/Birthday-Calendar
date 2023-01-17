@@ -73,10 +73,20 @@ function Calendar() {
   const removeFavorite = (birthday: any) => {
     const favs = [...favorites];
     const index = favs.indexOf(birthday);
-    favs.splice(index, 1);
 
-    setFavorites(favs);
+   favs.splice(index, 1);
+
+   setFavorites(favs);
   };
+
+  const updateBirthdays = (birthdays:Array<any>)=>{
+    setBirthdays(birthdays);
+  }
+
+
+  const updateFavorites = (birthdays:Array<any>)=>{
+    setFavorites(birthdays);
+  }
 
   const selectDate = async (newDate: any) => {
     const selected = dayjs(newDate);
@@ -154,7 +164,7 @@ function Calendar() {
                     {birthdays?.length > 0 && (
                       <Birthdays
                         birthdays={birthdays}
-                        setBirthdays={setBirthdays}
+                        updateBirthdays={updateBirthdays}
                         addFavorite={addFavorite}
                         removeFavorite={removeFavorite}
                       />
@@ -162,9 +172,11 @@ function Calendar() {
                   </TabPanel>
                   <TabPanel value="favorites" sx={{ padding: 0 }}>
                     <Favorites
-                      birthdays={favorites}
+                      favorites={favorites}
                       addFavorite={addFavorite}
                       removeFavorite={removeFavorite}
+                      updateBirthdays={updateBirthdays}
+                      birthdays={birthdays}
                     />
                   </TabPanel>
                 </TabContext>

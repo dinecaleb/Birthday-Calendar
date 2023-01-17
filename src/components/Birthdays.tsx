@@ -6,21 +6,19 @@ import { FixedSizeList, ListChildComponentProps } from "react-window";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Checkbox from "@mui/material/Checkbox";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { ListSubheader, TextField } from "@mui/material";
+import {  TextField } from "@mui/material";
 
 interface BirthdaysProps {
   birthdays?: Array<any>;
-  setBirthdays?: Function | any;
+  updateBirthdays?: Function | any;
   addFavorite?: Function | any;
   removeFavorite?: Function | any;
-  isFavorite?: boolean;
 }
 
 function renderRow(props: ListChildComponentProps) {
   const { index, style, data } = props;
   const value = data.data[index];
   const text = value?.text;
-  const isFavorite = data.isFavorite;
 
   const handleToggle = () => {
     data.favourite(value, index);
@@ -34,10 +32,7 @@ function renderRow(props: ListChildComponentProps) {
       disablePadding
       onClick={handleToggle}
     >
-      {isFavorite ?   <div>
-        <ListSubheader>{value?.date}</ListSubheader>
-        </div>:
-    
+  
       <ListItemButton role={undefined} dense>
       <ListItemIcon>
         <Checkbox
@@ -51,7 +46,7 @@ function renderRow(props: ListChildComponentProps) {
       </ListItemIcon>
       <ListItemText primary={text} />
     </ListItemButton>
-      }
+      
 
     </ListItem>
   );
@@ -59,15 +54,14 @@ function renderRow(props: ListChildComponentProps) {
 
 export default function Birthdays({
   birthdays,
-  setBirthdays,
+  updateBirthdays,
   addFavorite,
   removeFavorite,
-  isFavorite,
 }: BirthdaysProps) {
   const [data, setData] = React.useState(birthdays);
 
   const favourite = (value: any, index: number) => {
-    if (data && setBirthdays) {
+    if (data && updateBirthdays) {
       const birthdayList = [...data];
       const selected = birthdayList[index];
       selected["favorite"] = selected.favorite ? false : true;
@@ -79,9 +73,7 @@ export default function Birthdays({
         removeFavorite(selected);
       }
 
-      if (!isFavorite) {
-        setBirthdays(birthdayList);
-      }
+      updateBirthdays(birthdayList);
       //update ui with favorited birthdays
     }
   };
@@ -123,7 +115,6 @@ export default function Birthdays({
         itemData={{
           data,
           favourite,
-          isFavorite
         }}
       >
         {renderRow}
