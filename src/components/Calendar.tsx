@@ -73,10 +73,17 @@ function Calendar() {
 
   const removeFavorite = (birthday: any) => {
     const favs = [...favorites];
-    const index = favs.indexOf(birthday);
 
-   favs.splice(index, 1);
+    const favExist = favs.find(
+      (fav: any) =>
+        fav?.text === birthday?.text &&
+        fav?.month === birthday?.month
+    );
 
+    if (favExist) {
+      const index = favs.indexOf(favExist);
+      favs.splice(index, 1);
+    }
    setFavorites(favs);
   };
 
