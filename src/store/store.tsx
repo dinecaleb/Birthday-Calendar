@@ -14,9 +14,9 @@ interface StateProviderProps {
   children: any;
 }
 const StateProvider = ({ children }: StateProviderProps) => {
-    let newState = {...initialState};
+  let newState = { ...initialState };
   const [state, dispatch] = useReducer((state: any, action: any) => {
-     newState = { ...state };
+    newState = { ...state };
     switch (action.type) {
       case "addFavorite":
         let addFavs = [...state?.favorites];
@@ -25,9 +25,17 @@ const StateProvider = ({ children }: StateProviderProps) => {
         return newState;
       case "removeFavorite":
         let removeFavs = [...state?.favorites];
-        const index = removeFavs.indexOf(action.value);
 
-        removeFavs.splice(index, 1);
+        const favExist = removeFavs.find(
+          (fav: any) =>
+            fav?.text === action.value?.text &&
+            fav?.month === action.value?.month
+        );
+
+        if (favExist) {
+          const index = removeFavs.indexOf(favExist);
+          removeFavs.splice(index, 1);
+        }
         newState["favorites"] = removeFavs;
         return newState;
       case "updateBirthdays":

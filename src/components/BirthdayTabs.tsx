@@ -23,7 +23,6 @@ export default function BirthdayTabs() {
     setTab(newValue);
   };
 
-  console.log(favorites)
 
 
 
