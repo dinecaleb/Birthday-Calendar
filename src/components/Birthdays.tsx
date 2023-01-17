@@ -81,14 +81,15 @@ export default function Birthdays({
   ///search filter
   const searchFilter = (event: any) => {
     const inputValue = event.target.value;
-    if (data ) {
-      let results = [...data];
+    if (birthdays ) {
+      let results = [...birthdays];
       if (inputValue && inputValue?.length > 0) {
           results = results.filter((data) =>  data?.text.toLowerCase().includes(inputValue.toLowerCase()));
           setData(results)
       }
       else{
-        setData(birthdays)
+        
+        setData([...birthdays])
       }
     }
     
