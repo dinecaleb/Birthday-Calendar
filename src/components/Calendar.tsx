@@ -1,27 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { CalendarPicker } from "@mui/x-date-pickers/CalendarPicker";
 import dayjs, { Dayjs } from "dayjs";
 import { fetchBirthdays } from "../api/birthday";
-import Birthdays from "./Birthdays";
 import BirthdaysLoading from "./BirthdaysLoading";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import Favorites from "./Favorites";
 import { LinearProgress } from "@mui/material";
+import { store } from "../store/store";
+import BirthdayTabs from "./BirthdayTabs";
 
 function Calendar() {
   const tileSize = "45px";
 
   const CustomPicker = styled(CalendarPicker)(({ theme }) => ({
     "&.MuiCalendarPicker-root": {
-      width: 'auto',
+      width: "auto",
       maxHeight: "400px",
       height: "400px",
     },
@@ -46,54 +42,33 @@ function Calendar() {
     },
   }));
 
+  const globalState = useContext(store);
+  const { dispatch, state } = globalState;
+
+
   const [selectedDate, setDate] = React.useState<Dayjs | null>(
     dayjs(new Date())
   );
-  const [loading, setLoading] = React.useState(false);
-  const [favorites, setFavorites] = React.useState<Array<any>>([]);
-  const [birthdays, setBirthdays] = React.useState<Array<any>>([]);
 
-  const [currentTab, setTab] = React.useState("birthdays");
+  const loading = state?.loading;
+  const favorites = state?.favorites;
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setTab(newValue);
-  };
+
 
   React.useEffect(() => {
     selectDate(dayjs(new Date()));
   }, []);
 
-  ///keep track of selected favourites for each day
-  const addFavorite = (birthday: any) => {
-    const favs = [...favorites];
-
-    favs.push(birthday);
-    setFavorites(favs);
+  const updateBirthdays = (birthdays: Array<any>) => {
+    dispatch({ type: "updateBirthdays", value: birthdays });
   };
-
-  const removeFavorite = (birthday: any) => {
-    const favs = [...favorites];
-    const index = favs.indexOf(birthday);
-
-   favs.splice(index, 1);
-
-   setFavorites(favs);
-  };
-
-  const updateBirthdays = (birthdays:Array<any>)=>{
-    setBirthdays(birthdays);
-  }
-
-
-  const updateFavorites = (birthdays:Array<any>)=>{
-    setFavorites(birthdays);
-  }
 
   const selectDate = async (newDate: any) => {
     const selected = dayjs(newDate);
     if (selected) {
       setDate(newDate);
-      setLoading(true);
+      dispatch({ type: "updateLoading", value: true });
+
       const month = selected.month() + 1;
       const date = selected.date();
 
@@ -108,7 +83,7 @@ function Calendar() {
 
           ///check if already favorited
           const favExist = favorites.find(
-            (fav) =>
+            (fav: any) =>
               fav?.text === birthday?.text && fav?.month === birthday?.month
           );
 
@@ -119,9 +94,9 @@ function Calendar() {
           }
         });
 
-        setBirthdays(newBirthdays);
+        updateBirthdays(newBirthdays);
       }
-      setLoading(false);
+      dispatch({ type: "updateLoading", value: false });
     }
   };
 
@@ -152,37 +127,7 @@ function Calendar() {
           {loading ? (
             <BirthdaysLoading />
           ) : (
-            <React.Fragment>
-              {(birthdays?.length > 0 || favorites?.length > 0) && (
-                <TabContext value={currentTab}>
-                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <TabList onChange={handleChange}>
-                      <Tab label="Birthdays" value="birthdays" />
-                      <Tab label="Favorites" value="favorites" />
-                    </TabList>
-                  </Box>
-                  <TabPanel value="birthdays" sx={{ padding: 0 }}>
-                    {birthdays?.length > 0 && (
-                      <Birthdays
-                        birthdays={birthdays}
-                        updateBirthdays={updateBirthdays}
-                        addFavorite={addFavorite}
-                        removeFavorite={removeFavorite}
-                      />
-                    )}
-                  </TabPanel>
-                  <TabPanel value="favorites" sx={{ padding: 0 }}>
-                    <Favorites
-                      favorites={favorites}
-                      addFavorite={addFavorite}
-                      removeFavorite={removeFavorite}
-                      updateBirthdays={updateBirthdays}
-                      birthdays={birthdays}
-                    />
-                  </TabPanel>
-                </TabContext>
-              )}
-            </React.Fragment>
+            <BirthdayTabs/>
           )}
         </div>
       </div>

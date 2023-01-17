@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -7,22 +7,32 @@ import Checkbox from "@mui/material/Checkbox";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import _ from "lodash";
 import { List, ListSubheader } from "@mui/material";
+import { store } from "../store/store";
 
 interface FavoritesProps {
   birthdays?: Array<any>;
-  addFavorite?: Function | any;
   updateBirthdays?: Function | any;
-  removeFavorite?: Function | any;
   favorites?: Array<any>;
 
 }
 
 export default function Favorites({
   birthdays,
-  addFavorite,
-  removeFavorite,
   favorites
 }: FavoritesProps) {
+
+  const globalState = useContext(store);
+  const { dispatch } = globalState;
+
+
+  const addFavorite = (birthday: any) => {
+    dispatch({ type: 'addFavorite',value:birthday })
+  };
+
+  const removeFavorite = (birthday: any) => {
+    dispatch({ type: 'removeFavorite',value:birthday })
+  };
+
   const favs = _.groupBy(favorites, (birthday) => birthday.date); ///group by birthday
 
 
@@ -51,7 +61,7 @@ export default function Favorites({
   };
 
   return (
-    <div className="w-full overflow-auto max-h-[400px]">
+    <div className="w-full overflow-auto max-h-[500px]">
       {favs && Object.keys(favs).length > 0 ? (
         <List>
           {Object.keys(favs).map((key, index) => {
