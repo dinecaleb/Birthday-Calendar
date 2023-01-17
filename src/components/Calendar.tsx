@@ -8,12 +8,13 @@ import Birthdays from "./Birthdays";
 import BirthdaysLoading from "./BirthdaysLoading";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress/LinearProgress";
+
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Favorites from "./Favorites";
+import { LinearProgress } from "@mui/material";
 
 function Calendar() {
   const tileSize = "50px";
