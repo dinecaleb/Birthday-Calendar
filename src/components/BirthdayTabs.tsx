@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 
 export default function BirthdayTabs() {
   const globalState = useContext(store);
-  const { dispatch, state } = globalState;
+  const {  state } = globalState;
   const favorites = state?.favorites;
   const birthdays = state?.birthdays;
 
@@ -37,12 +37,10 @@ export default function BirthdayTabs() {
                     </TabList>
                   </Box>
                   <TabPanel value="birthdays" sx={{ padding: 0 }}>
-                    {birthdays?.length > 0 && (
-                      <Birthdays birthdays={birthdays} />
-                    )}
+                       <Birthdays />
                   </TabPanel>
                   <TabPanel value="favorites" sx={{ padding: 0 }}>
-                    <Favorites favorites={favorites} birthdays={birthdays} />
+                    <Favorites  />
                   </TabPanel>
                 </TabContext>
               )}

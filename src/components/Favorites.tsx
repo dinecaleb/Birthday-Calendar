@@ -8,21 +8,19 @@ import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import _ from "lodash";
 import { List, ListSubheader } from "@mui/material";
 import { store } from "../store/store";
+import dayjs from "dayjs";
 
 interface FavoritesProps {
-  birthdays?: Array<any>;
   updateBirthdays?: Function | any;
   favorites?: Array<any>;
 
 }
 
-export default function Favorites({
-  birthdays,
-  favorites
-}: FavoritesProps) {
+export default function Favorites() {
 
   const globalState = useContext(store);
-  const { dispatch } = globalState;
+  const {  state,dispatch } = globalState;
+  const favorites = state?.favorites;
 
 
   const addFavorite = (birthday: any) => {
@@ -66,10 +64,11 @@ export default function Favorites({
         <List>
           {Object.keys(favs).map((key, index) => {
             const favouritesByDate = favs[key];
-
+            const date =  dayjs(key);
+            const subheaderDate = date.format("MMMM") + " " + date.date();
             return (
               <React.Fragment key={index + "favouriteDate"}>
-                <ListSubheader>{key}</ListSubheader>
+                <ListSubheader>{subheaderDate}</ListSubheader>
                 {favouritesByDate &&
                   favouritesByDate.map((value,favIndex) => {
                     return (

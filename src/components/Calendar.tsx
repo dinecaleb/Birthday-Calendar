@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { CalendarPicker } from "@mui/x-date-pickers/CalendarPicker";
@@ -51,7 +51,7 @@ function Calendar() {
   );
 
   const loading = state?.loading;
-  const favorites = state?.favorites;
+  const favorites = [...state.favorites];
 
 
 
@@ -59,9 +59,7 @@ function Calendar() {
     selectDate(dayjs(new Date()));
   }, []);
 
-  const updateBirthdays = (birthdays: Array<any>) => {
-    dispatch({ type: "updateBirthdays", value: birthdays });
-  };
+ 
 
   const selectDate = async (newDate: any) => {
     const selected = dayjs(newDate);
@@ -76,9 +74,10 @@ function Calendar() {
 
       if (birthdays && birthdays?.length > 0) {
         const newBirthdays = [...birthdays];
+
         newBirthdays.forEach((birthday) => {
           /// correct previous fav state
-          birthday["date"] = selected.format("MMMM") + " " + date;
+          birthday["date"] = selected;  //for date filtering
           birthday["favorite"] = true;
 
           ///check if already favorited
@@ -94,7 +93,8 @@ function Calendar() {
           }
         });
 
-        updateBirthdays(newBirthdays);
+        dispatch({ type: "updateBirthdays", value: newBirthdays });
+ 
       }
       dispatch({ type: "updateLoading", value: false });
     }
@@ -115,7 +115,7 @@ function Calendar() {
               onChange={selectDate}
               loading={loading}
               renderLoading={() => (
-                <Box sx={{ textAlign: "center" }}>
+                <Box >
                   <LinearProgress />
                   <p className="text-lg mt-4 mb-4 ">Loading Birthdays...</p>
                 </Box>

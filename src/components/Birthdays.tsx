@@ -6,7 +6,7 @@ import { FixedSizeList, ListChildComponentProps } from "react-window";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Checkbox from "@mui/material/Checkbox";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import {  TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { store } from "../store/store";
 
 interface BirthdaysProps {
@@ -30,44 +30,38 @@ function renderRow(props: ListChildComponentProps) {
       disablePadding
       onClick={handleToggle}
     >
-  
       <ListItemButton role={undefined} dense>
-      <ListItemIcon>
-        <Checkbox
-          edge="start"
-          checked={value?.favorite || false}
-          tabIndex={-1}
-          disableRipple
-          checkedIcon={<Favorite />}
-          icon={<FavoriteBorder />}
-        />
-      </ListItemIcon>
-      <ListItemText primary={text} />
-    </ListItemButton>
-      
-
+        <ListItemIcon>
+          <Checkbox
+            edge="start"
+            checked={value?.favorite || false}
+            tabIndex={-1}
+            disableRipple
+            checkedIcon={<Favorite />}
+            icon={<FavoriteBorder />}
+          />
+        </ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItemButton>
     </ListItem>
   );
 }
 
-export default function Birthdays({
-  birthdays,
-}: BirthdaysProps) {
-
-
+export default function Birthdays() {
   const globalState = useContext(store);
-  const { dispatch } = globalState;
+  const { state, dispatch } = globalState;
+  const birthdays = state?.birthdays;
 
-  const updateBirthdays = (birthdays:Array<any>)=>{
-    dispatch({ type: 'updateBirthdays',value:birthdays })
-  }
+  const updateBirthdays = (birthdays: Array<any>) => {
+    dispatch({ type: "updateBirthdays", value: birthdays });
+  };
 
   const addFavorite = (birthday: any) => {
-    dispatch({ type: 'addFavorite',value:birthday })
+    dispatch({ type: "addFavorite", value: birthday });
   };
 
   const removeFavorite = (birthday: any) => {
-    dispatch({ type: 'removeFavorite',value:birthday })
+    dispatch({ type: "removeFavorite", value: birthday });
   };
 
   const [data, setData] = React.useState(birthdays);
@@ -93,45 +87,50 @@ export default function Birthdays({
   ///search filter
   const searchFilter = (event: any) => {
     const inputValue = event.target.value;
-    if (birthdays ) {
+    if (birthdays) {
       let results = [...birthdays];
       if (inputValue && inputValue?.length > 0) {
-          results = results.filter((data) =>  data?.text.toLowerCase().includes(inputValue.toLowerCase()));
-          setData(results)
-      }
-      else{
-        
-        setData([...birthdays])
+        results = results.filter((data) =>
+          data?.text.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        setData(results);
+      } else {
+        setData([...birthdays]);
       }
     }
-    
   };
 
   return (
     <div className="w-full">
-      <div className="mb-4 mt-4">
-        <TextField
-          fullWidth
-          hiddenLabel
-          variant="filled"
-          onChange={searchFilter}
-          placeholder="Search..."
-        />
-      </div>
+      {birthdays && birthdays.length > 0 ? (
+        <React.Fragment>
+          <div className="mb-4 mt-4">
+            <TextField
+              fullWidth
+              hiddenLabel
+              variant="filled"
+              onChange={searchFilter}
+              placeholder="Search..."
+            />
+          </div>
 
-      <FixedSizeList
-        height={400}
-        width="100%"
-        itemSize={50}
-        itemCount={data ? data.length : 0}
-        overscanCount={5}
-        itemData={{
-          data,
-          favourite,
-        }}
-      >
-        {renderRow}
-      </FixedSizeList>
+          <FixedSizeList
+            height={400}
+            width="100%"
+            itemSize={50}
+            itemCount={data ? data.length : 0}
+            overscanCount={5}
+            itemData={{
+              data,
+              favourite,
+            }}
+          >
+            {renderRow}
+          </FixedSizeList>
+        </React.Fragment>
+      ) : (
+        <p className="text-lg mt-4 mb-4 ">No birthdays found!</p>
+      )}
     </div>
   );
 }

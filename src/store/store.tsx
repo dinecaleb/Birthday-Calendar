@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import moment from "moment";
 import React, { createContext, useReducer } from "react";
 
 const initialState: any = {
@@ -21,6 +22,12 @@ const StateProvider = ({ children }: StateProviderProps) => {
       case "addFavorite":
         let addFavs = [...state?.favorites];
         addFavs.push(action.value);
+
+
+        ///SORT BY DATE
+        addFavs = addFavs.sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1))
+
+
         newState["favorites"] = addFavs;
         return newState;
       case "removeFavorite":
