@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -7,12 +7,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Checkbox from "@mui/material/Checkbox";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import {  TextField } from "@mui/material";
+import { store } from "../store/store";
 
 interface BirthdaysProps {
   birthdays?: Array<any>;
-  updateBirthdays?: Function | any;
-  addFavorite?: Function | any;
-  removeFavorite?: Function | any;
 }
 
 function renderRow(props: ListChildComponentProps) {
@@ -54,10 +52,24 @@ function renderRow(props: ListChildComponentProps) {
 
 export default function Birthdays({
   birthdays,
-  updateBirthdays,
-  addFavorite,
-  removeFavorite,
 }: BirthdaysProps) {
+
+
+  const globalState = useContext(store);
+  const { dispatch } = globalState;
+
+  const updateBirthdays = (birthdays:Array<any>)=>{
+    dispatch({ type: 'updateBirthdays',value:birthdays })
+  }
+
+  const addFavorite = (birthday: any) => {
+    dispatch({ type: 'addFavorite',value:birthday })
+  };
+
+  const removeFavorite = (birthday: any) => {
+    dispatch({ type: 'removeFavorite',value:birthday })
+  };
+
   const [data, setData] = React.useState(birthdays);
 
   const favourite = (value: any, index: number) => {
